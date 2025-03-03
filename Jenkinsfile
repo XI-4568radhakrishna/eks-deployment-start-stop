@@ -5,7 +5,7 @@ pipeline {
             steps {
                 script {
                     sh '''
-                    curl -O "https://s3.us-west-2.amazonaws.com/amazon-eks/1.32.0/2024-12-20/bin/linux/arm64/kubectl"
+                    curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/${ARCH}/kubectl"
                     chmod +x kubectl
                     sudo mv kubectl /usr/local/bin/
                     kubectl version --client
@@ -28,7 +28,7 @@ pipeline {
                 script {
                     sh '''
                     export KUBECONFIG=$KUBECONFIG
-                    kubectl scale deployment my-app --replicas=0 -n my-namespace
+                    kubectl scale deployment eksdemo-fastapi --replicas=0 -n default
                     '''
                 }
             }
@@ -45,7 +45,7 @@ pipeline {
                 script {
                     sh '''
                     export KUBECONFIG=$KUBECONFIG
-                    kubectl scale deployment my-app --replicas=3 -n my-namespace
+                    kubectl scale deployment eksdemo-fastapi --replicas=3 -n default
                     '''
                 }
             }
